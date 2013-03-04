@@ -1,4 +1,4 @@
-import string,time,datetime,serial,re,subprocess,os,usb,re,subprocess
+import string,time,datetime,serial,re,subprocess,os,usb,re,subprocess,commands
 
 #keypad = None #Keypad + LCD display connected to the keypad
 #motors = None #Stepper motors + LCD dispaly connected to the arduino
@@ -16,15 +16,16 @@ def initializeHardware():
         keypadSerial = "64936333037351E0E1E1"
         motorSerial = "64932343938351119122"
 
+        getHardwareLocation(keypadSerial)
+        getHardwareLocation(motorSerial)
+
         #Create Serial Object
         #keypad = serial.Serial(keypadDevice, keypadBaudRate)
         #motors = serial.Serial(motorDevice, motorBaudRate)
 
 def getHardwareLocation(serialNumber):
-		command = "dmesg | grep " + serialNumber + " -A 1 | tail -n 1 | grep -o 'ttyACM[[:digit:]]'"
-		p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-		output = p.stdout.readline()
-		print(output)
+		cmd = "dmesg | grep " + serialNumber + " -A 1 | tail -n 1 | grep -o 'ttyACM[[:digit:]]'"
+		print(commands.getstatusoutput(cmd))
 
 #Return the complete time and date in string format
 #Required to initialize the stepper motors
