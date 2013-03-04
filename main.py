@@ -4,33 +4,27 @@ import string,time,datetime,serial,re,subprocess,os,usb,re,subprocess
 #motors = None #Stepper motors + LCD dispaly connected to the arduino
 
 def main():
-        initializeHardware()
+    	initializeHardware()
         speakTime(005,045)
 
 #Initialize the two Arduino boards
 def initializeHardware():
 
-		device_re = re.compile("Bus\s+(?P<bus>\d+)\s+Device\s+(?P<device>\d+).+ID\s(?P<id>\w+:\w+)\s(?P<tag>.+)$", re.I)
-		df = subprocess.check_output("lsusb", shell=True)
-		devices = []
-		for i in df.split('\n'):
-		    if i:
-		    	info = device_re.match(i)
-		        if info:
-		            dinfo = info.groupdict()
-		            dinfo['device'] = '/dev/bus/usb/%s/%s' % (dinfo.pop('bus'), dinfo.pop('device'))
-		            devices.append(dinfo)
-		print devices
-
-        #Parameters
+     	#Parameters
         keypadBaudRate = 9600
         motorBaudRate = 9600
-        keypadDevice = "/dev/ttyACM1"
-        motorDevice = "/dev/ttyACM0"
+        keypadSerial = "64936333037351E0E1E1"
+        motorSerial = "64932343938351119122"
 
         #Create Serial Object
         #keypad = serial.Serial(keypadDevice, keypadBaudRate)
         #motors = serial.Serial(motorDevice, motorBaudRate)
+
+def getHardwareLocation(serialNumber):
+		command = "dmesg | grep " + serialNumber + " -A 1 | tail -n 1 | grep -o 'ttyACM[[:digit:]]'"
+		p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+		output = p.stdout.readline()
+		print(output)
 
 #Return the complete time and date in string format
 #Required to initialize the stepper motors
