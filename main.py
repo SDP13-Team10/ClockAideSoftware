@@ -1,4 +1,4 @@
-import string,time,datetime,serial,re,subprocess,os,usb
+import string,time,datetime,serial,re,subprocess,os,usb,re,subprocess
 
 #keypad = None #Keypad + LCD display connected to the keypad
 #motors = None #Stepper motors + LCD dispaly connected to the arduino
@@ -10,20 +10,17 @@ def main():
 #Initialize the two Arduino boards
 def initializeHardware():
 
-	busses = usb.busses()
-	for bus in busses:
-		devices = bus.devices
-	  	for dev in devices:
-		    _name = usb.util.get_string(dev.dev,256,2) 
-		    print "device name=",_name
-		    print "Device:", dev.filename
-		    print "  Device class:",dev.deviceClass
-		    print "  Device sub class:",dev.deviceSubClass
-		    print "  Device protocol:",dev.deviceProtocol
-		    print "  Max packet size:",dev.maxPacketSize
-		    print "  idVendor:",hex(dev.idVendor)
-		    print "  idProduct:",hex(dev.idProduct)
-		    print "  Device Version:",dev.deviceVersion
+		device_re = re.compile("Bus\s+(?P<bus>\d+)\s+Device\s+(?P<device>\d+).+ID\s(?P<id>\w+:\w+)\s(?P<tag>.+)$", re.I)
+		df = subprocess.check_output("lsusb", shell=True)
+		devices = []
+		for i in df.split('\n'):
+		    if i:
+		    	info = device_re.match(i)
+		        if info:
+		            dinfo = info.groupdict()
+		            dinfo['device'] = '/dev/bus/usb/%s/%s' % (dinfo.pop('bus'), dinfo.pop('device'))
+		            devices.append(dinfo)
+		print devices
 
         #Parameters
         keypadBaudRate = 9600
