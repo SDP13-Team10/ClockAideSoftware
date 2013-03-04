@@ -1,7 +1,7 @@
 import string,time,datetime,serial,re,subprocess
 
-global keypad
-global motors
+keypad #Keypad + LCD display connected to the keypad
+motors #Stepper motors + LCD dispaly connected to the arduino
 
 def main():
 	print('Hello!')
@@ -13,25 +13,24 @@ def initializeHardware():
 	#Parameters 
 	keypadBaudRate = 9600
 	motorBaudRate = 9600
-
-	device_re = re.compile("Bus\s+(?P<bus>\d+)\s+Device\s+(?P<device>\d+).+ID\s(?P<id>\w+:\w+)\s(?P<tag>.+)$", re.I)
-	df = subprocess.check_output("lsusb", shell=True)
-	devices = []
-	for i in df.split('\n'):
-    	if i:
-        	info = device_re.match(i)
-        	if info:
-            	dinfo = info.groupdict()
-            	dinfo['device'] = '/dev/bus/usb/%s/%s' % (dinfo.pop('bus'), dinfo.pop('device'))
-            	devices.append(dinfo)
+	keypadDevice = "/dev/ttyACM2"
+	motorDevice = "/dev/ttyACM0"
 
 	#Create Serial Object
-	keypad = Serial.serial()
-	motors = Serial.serial()
+	global keypad = Serial.serial(keypadDevice, keypadBaudRate)
+	global motors = Serial.serial(motorDevice, motorBaudRate)
 
+#Return the complete time and date in string format
+#Required to initialize the stepper motors
+def getDateTimeString():
+	currentTime = datetime.datetime.now()
+	#print(currentTime.strftime("%I%M"))
+	return currentTime.strftime("%H, %M, %S, %d, %m, %Y")
+
+#Returns the hour and minute in string format
 def getTimeString():
 	currentTime = datetime.datetime.now()
 	#print(currentTime.strftime("%I%M"))
-	return currentTime.strftime("%I%M")
+	return currentTime.strftime("%H, %M")
 
 if  __name__ =='__main__':main()
