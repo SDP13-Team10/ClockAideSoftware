@@ -1,7 +1,7 @@
 import string,time,datetime,serial,re,subprocess
 
-keypad #Keypad + LCD display connected to the keypad
-motors #Stepper motors + LCD dispaly connected to the arduino
+keypad = None #Keypad + LCD display connected to the keypad
+motors = None #Stepper motors + LCD dispaly connected to the arduino
 
 def main():
 	print('Hello!')
@@ -17,8 +17,8 @@ def initializeHardware():
 	motorDevice = "/dev/ttyACM0"
 
 	#Create Serial Object
-	# keypad = Serial.serial(keypadDevice, keypadBaudRate)
-	# global motors = Serial.serial(motorDevice, motorBaudRate)
+	global keypad = Serial.serial(keypadDevice, keypadBaudRate)
+	global motors = Serial.serial(motorDevice, motorBaudRate)
 
 #Return the complete time and date in string format
 #Required to initialize the stepper motors
