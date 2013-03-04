@@ -16,7 +16,7 @@ def initializeHardware():
         keypadSerial = "64936333037351E0E1E1"
         motorSerial = "64932343938351119122"
 
-        getHardwareLocation(keypadSerial)
+        keypadLocation = getHardwareLocation(keypadSerial)
         getHardwareLocation(motorSerial)
 
         #Create Serial Object
@@ -25,7 +25,17 @@ def initializeHardware():
 
 def getHardwareLocation(serialNumber):
 		cmd = "dmesg | grep " + serialNumber + " -A 1 | tail -n 1 | grep -o 'ttyACM[[:digit:]]'"
-		print(commands.getstatusoutput(cmd))
+		cmdOutput = commands.getstatusoutput(cmd)[1]
+		if cmdOutput == "" or cmdOutput == " ":
+			return "notConnected"
+		else:
+			devLocation = cmdOutput
+			connectionCheck = "cat /dev/" + devLocation
+			connectionCheckOutput = commands.getstatusoutput(connectionCheck)[1]
+			if connectionCheckOutput = "" or connectionCheckOutput = " ":
+				return devLocation
+			else:
+				return "notConnected"
 
 #Return the complete time and date in string format
 #Required to initialize the stepper motors
