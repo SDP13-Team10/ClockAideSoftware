@@ -17,8 +17,8 @@ def initializeHardware():
 	motorDevice = "/dev/ttyACM0"
 
 	#Create Serial Object
-	global keypad = Serial.serial(keypadDevice, keypadBaudRate)
-	global motors = Serial.serial(motorDevice, motorBaudRate)
+	# keypad = Serial.serial(keypadDevice, keypadBaudRate)
+	# global motors = Serial.serial(motorDevice, motorBaudRate)
 
 #Return the complete time and date in string format
 #Required to initialize the stepper motors
