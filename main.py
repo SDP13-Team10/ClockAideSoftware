@@ -1,4 +1,4 @@
-import string,time,datetime,serial,re,subprocess,os
+import string,time,datetime,serial,re,subprocess,os,usb
 
 #keypad = None #Keypad + LCD display connected to the keypad
 #motors = None #Stepper motors + LCD dispaly connected to the arduino
@@ -9,6 +9,21 @@ def main():
 
 #Initialize the two Arduino boards
 def initializeHardware():
+
+	busses = usb.busses()
+	for bus in busses:
+		devices = bus.devices
+	  	for dev in devices:
+		    _name = usb.util.get_string(dev.dev,256,2) 
+		    print "device name=",_name
+		    print "Device:", dev.filename
+		    print "  Device class:",dev.deviceClass
+		    print "  Device sub class:",dev.deviceSubClass
+		    print "  Device protocol:",dev.deviceProtocol
+		    print "  Max packet size:",dev.maxPacketSize
+		    print "  idVendor:",hex(dev.idVendor)
+		    print "  idProduct:",hex(dev.idProduct)
+		    print "  Device Version:",dev.deviceVersion
 
         #Parameters
         keypadBaudRate = 9600
