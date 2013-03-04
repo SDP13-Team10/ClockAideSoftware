@@ -43,7 +43,6 @@ def speakTime(hour, minute):
                 minuteFile="/home/pi/ClockAideSoftware/VoiceMap/Minutes/"+str(minute)+".wav"
 
         playVoiceMap = "mplayer %s 1>/dev/null 2>&1 " + hourFile + " " + minuteFile
-        print(playVoiceMap)
         os.system(playVoiceMap)
 
 if  __name__ =='__main__':main()
