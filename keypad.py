@@ -4,10 +4,10 @@ keypadBaudRate = 9600
 keypadSerial = "64936333037351E0E1E1"
 keypadLocation = "/dev/ttyACM0"
 
-keypad = serial.Serial(keypadLocation.keypadBaudRate) #Keypad + LCD display connected to the keypad
+keypad = serial.Serial(keypadLocation,keypadBaudRate) #Keypad + LCD display connected to the keypad
 
 currentTime = datetime.datetime.now()
-currentTime.strftime("%H, %M, %S, %d, %m, %Y")
+currentTime = currentTime.strftime("%H, %M, %S, %d, %m, %Y")
 keypad.write(currentTime)
 
 while True:
