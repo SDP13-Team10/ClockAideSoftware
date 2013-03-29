@@ -4,7 +4,8 @@ keypad = serial.Serial() #Keypad + LCD display connected to the keypad
 motors = serial.Serial() #Stepper motors + LCD dispaly connected to the arduino
 
 def main():
-        initializeHardware()
+        #initializeHardware()
+        p = Popen(['python', './keypad.py'], stdin=PIPE, stdout=PIPE, stderr=PIPE)
 
 #Initialize the two Arduino boards
 def initializeHardware():
