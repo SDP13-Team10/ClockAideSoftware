@@ -6,6 +6,10 @@ keypadLocation = "/dev/ttyACM0"
 
 keypad = serial.Serial(keypadLocation.keypadBaudRate) #Keypad + LCD display connected to the keypad
 
+currentTime = datetime.datetime.now()
+currentTime.strftime("%H, %M, %S, %d, %m, %Y")
+keypad.write(currentTime)
+
 while True:
     mainInput = sys.stdin.readline()
     if mainInput is "RX":
