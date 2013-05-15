@@ -1,4 +1,6 @@
+#! /usr/bin/env python
 import string,time,datetime,serial,re,subprocess,os,usb,re,subprocess,commands
+from subprocess import Popen, PIPE
 
 keypad = serial.Serial() #Keypad + LCD display connected to the keypad
 motors = serial.Serial() #Stepper motors + LCD dispaly connected to the arduino
@@ -7,30 +9,7 @@ def main():
         #initializeHardware()
         p = Popen(['python', './keypad.py'], stdin=PIPE, stdout=PIPE, stderr=PIPE)
 
-#Initialize the two Arduino boards
-def initializeHardware():
-
-        #Parameters
-        keypadBaudRate = 9600
-        motorBaudRate = 9600
-        keypadSerial = "64936333037351E0E1E1"
-        motorSerial = "64932343938351119122"
-
-        keypadLocation = getHardwareLocation(keypadSerial)
-        motorLocation = getHardwareLocation(motorSerial)
-
-    if motorLocation != "notConnected":
-        motorPath = "/dev/" + motorLocation
-        motors = serial.Serial(motorPath, motorBaudRate)
-    else:
-        print("Motor not connected")
-
-    if keypadLocation != "notConnected":
-        keypadPath = "/dev/" + keypadLocation
-        keypad = serial.serial(keypadPath,keypadBaudRate)
-    else:
-        print("Keypad not connected")
-    
+#Initialize the two Arduino boards    
 def getHardwareLocation(serialNumber):
         cmd = "dmesg | grep " + serialNumber + " -A 1 | tail -n 1 | grep -o 'ttyACM[[:digit:]]'"
         cmdOutput = commands.getstatusoutput(cmd)[1]
